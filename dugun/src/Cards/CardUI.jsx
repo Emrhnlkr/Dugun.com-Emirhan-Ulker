@@ -40,7 +40,7 @@ const Card = props => {
                     setOpenPopup={setOpenPopup}
                 >
                     <GetOfferForm
-                        recordForEdit={recordForEdit} />
+                        cardId={props.cardId} recordForEdit={recordForEdit} />
                 </Popup>
                 <a className="btn btn-outline-danger btn-size">İncele</a>
                 <a onClick={() => { setOpenPopup(true); setRecordForEdit(null); }} className="btn btn-color ">Ücretsiz teklif al</a>

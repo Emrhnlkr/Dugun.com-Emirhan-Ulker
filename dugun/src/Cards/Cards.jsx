@@ -27,7 +27,7 @@ class Cards extends Component {
                     {this.state.list.map(item => {
                         return (
                             <div key={item.id} className="col-md-6">
-                                <Card imgsrc={item.imageUrl} capasityCount={"Max. " + item.listingDataBrief[0].value} personCount={"Min. Yemekli " + item.listingDataBrief[1].value} place={item.district.name} hotelName={item.name} starCount={item.score} commentCount={item.commentCount} />
+                                <Card cardId={item.id} imgsrc={item.imageUrl} capasityCount={"Max. " + item.listingDataBrief[0].value} personCount={"Min. Yemekli " + item.listingDataBrief[1].value} place={item.district.name} hotelName={item.name} starCount={item.score} commentCount={item.commentCount} />
                             </div>)
                     })}
                 </div>

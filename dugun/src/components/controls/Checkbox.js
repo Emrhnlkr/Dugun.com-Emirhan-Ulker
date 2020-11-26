@@ -9,8 +9,9 @@ export default function Checkbox(props) {
         }
     })
     return (
-        <FormControl>
+        <FormControl >
             <FormControlLabel
+            
                 control={<MuiCheckbox
                     name={name}
                     color={"red"}

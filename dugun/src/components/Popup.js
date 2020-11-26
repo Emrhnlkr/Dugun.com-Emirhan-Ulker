@@ -16,8 +16,8 @@ export default function Popup(props) {
     const { title, children, openPopup, setOpenPopup } = props;
     const classes = useStyles();
     return (
-        <Dialog open={openPopup} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
-            <DialogTitle className={classes.dialogTitle}>
+        <Dialog open={openPopup} maxWidth="md" classes={{ paper: classes.dialogWrapper }} style={{marginTop:-50}}>
+            <DialogTitle className={classes.dialogTitle} >
                 <div style={{ display: 'flex' }}>
                     <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
                         {title}
@@ -29,7 +29,7 @@ export default function Popup(props) {
                     </Controls.ActionButton>
                 </div>
             </DialogTitle>
-            <DialogContent dividers>
+            <DialogContent dividers >
                 {children}
             </DialogContent>
         </Dialog>

@@ -21,6 +21,7 @@ export default function Notification(props) {
     }
     return (
         <Snackbar
+        
             className={classes.root}
             open={notify.isOpen}
             autoHideDuration={3000}

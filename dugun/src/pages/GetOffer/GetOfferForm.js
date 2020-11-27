@@ -3,6 +3,8 @@ import { Grid, } from '@material-ui/core';
 import Controls from "../../components/controls/Controls";
 import { useForm, Form } from '../../components/useForm';
 import axios from 'axios';
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 //Açılan popup'in içindeki form alanları
 const initialFValues = {
@@ -18,11 +20,13 @@ const initialFValues = {
     isRead: false,
 }
 export default function GetOfferForm(props) {
+
     const { addOrEdit, recordForEdit } = props
-    const validate = (fieldValues = values) => {
+    const validate = (fieldValues = { values }) => {
         let temp = { ...errors }
         if ('fullName' in fieldValues)
             temp.fullName = fieldValues.fullName ? "" : "Bu alan zorunlu."
+        temp.fullName = (/^[a-zA-Z]+$/).test(fieldValues.fullName) ? "" : "Rakam Olamaz"
         if ('email' in fieldValues)
             temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email geçerli değiş."
         if ('mobile' in fieldValues)
@@ -42,65 +46,64 @@ export default function GetOfferForm(props) {
         setValues,
         errors,
         setErrors,
+        resetForm,
         handleInputChange,
     } = useForm(initialFValues, true, validate);
     const handleSubmit = e => {
+        e.preventDefault()
+        if (validate()) {
+            addOrEdit(values, resetForm);
+        }
         alert("Fiyat Teklifin Başarıyla İletildi.")
     }
     const [formElements, setFormElements] = useState([]);
+    const [buttonDel, setButtonDel] = useState(true);
+
     useEffect(() => {
-        axios.get("https://private-1be47-duguncomapis.apiary-mock.com/companies/" + props.cardId +"/forms")
-        .then((response) => {
-            // handle success
-            console.log(response);
-            setFormElements(response.data);
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
+        axios.get("https://private-1be47-duguncomapis.apiary-mock.com/companies/" + props.cardId + "/forms")
+            .then((response) => {
+                // handle success
+                console.log(response);
+                setFormElements(response.data);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
         if (recordForEdit != null)
             setValues({
                 ...recordForEdit
             })
     }, [recordForEdit])
     return (
-        <Form onSubmit={handleSubmit} >
-            <Grid container >
+        <Form onSubmit={handleSubmit}>
+            <Grid container  >
                 <Grid item xs={12}>
                     {formElements.map(item => {
-                        if(item.fieldType == "text" || item.fieldType == "textarea"){
-                        return(
-                            <Controls.Input
-                                name={item.fieldName}
-                                label={item.fieldLabel}
-                                value={null}
-                                isRequired={item.isRequired}
-                                onChange={handleInputChange}
-                                error={errors.fullName}
-                            />
-                        )
-                        } else if(item.fieldType == "select"){
-                            return(
+                        if (item.fieldType === "text" || item.fieldType === "textarea") {
+                            return (
+                                <Controls.Input
+                                    name={item.fieldName}
+                                    label={item.fieldLabel}
+                                    value={null}
+                                    isRequired={item.isRequired}
+                                    onChange={handleInputChange}
+                                    error={errors.fullName}
+                                />
+                            )
+                        } else if (item.fieldType === "select") {
+                            return (
                                 <Controls.Select
-                                name={item.fieldName}
-                                label={item.fieldLabel}
-                                isRequired={item.isRequired}
-                                onChange={handleInputChange}
-                                options={item.infoRequestFormOptions}
-                                error={errors.feePerPerson}
+                                    name={item.fieldName}
+                                    label={item.fieldLabel}
+                                    isRequired={item.isRequired}
+                                    onChange={handleInputChange}
+                                    options={item.infoRequestFormOptions}
+                                    error={errors.feePerPerson}
                                 />
                             )
                         }
                     })}
-
-                    <Controls.Input
-                        label="Mesaj (Opsiyonel)"
-                        name="message"
-                        value={values.message}
-                        onChange={handleInputChange}
-                        error={errors.message}
-                    />
                     <Controls.Checkbox
                         name="isRead"
                         color="#DB0962"
